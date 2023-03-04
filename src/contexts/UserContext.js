@@ -7,26 +7,33 @@ export const AuthContext = createContext();
 const auth = getAuth(app);
 
 const UserContext = ({ children }) => {
-    const [user, setUser] = useState({ displayName: 'Al Amin Miah' });
+    const [user, setUser] = useState({});
+    const [loading, setLoading] = useState(true);
+
 
     const googleProvider = new GoogleAuthProvider();
 
+    // user creating 
     const createUser = (email, password) => {
         return createUserWithEmailAndPassword(auth, email, password);
     }
 
+    // user signing
     const signUser = (email, password) => {
         return signInWithEmailAndPassword(auth, email, password);
     }
 
+    // user logging 
     const logOut = () => {
         return signOut(auth);
     }
 
     // why are we doing this?
+    // get current user 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser);
+            setLoading(false);
             console.log('auth state changed:', currentUser);
         })
         return () => {
@@ -34,11 +41,12 @@ const UserContext = ({ children }) => {
         }
     }, []);
 
+    // google signing 
     const signInWithGoogle = () => {
         return signInWithPopup(auth, googleProvider)
     }
 
-    const authInfo = { user, createUser, signUser, logOut, signInWithGoogle };
+    const authInfo = { user, loading, setUser, createUser, signUser, logOut, signInWithGoogle };
 
     return (
         <AuthContext.Provider value={authInfo}>

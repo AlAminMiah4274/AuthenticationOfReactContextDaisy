@@ -15,7 +15,7 @@ function App() {
       children: [
         {
           path: '/',
-          element: <Home></Home>
+          element: <PrivateRoutes><Home></Home></PrivateRoutes>
         },
         {
           path: '/login',
@@ -27,6 +27,8 @@ function App() {
         },
         {
           path: '/orders',
+          // if a user is logged out and i do not want to allow the user in a component, code will be written like this.
+          // for more see the PrivateRoute component. 
           element: <PrivateRoutes><Orders></Orders></PrivateRoutes>
         }
       ]
